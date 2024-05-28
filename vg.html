@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            height: 100vh;
+            justify-content: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #gameContainer {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #question {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        #answerInput {
+            width: 100px;
+            padding: 5px;
+            font-size: 1em;
+        }
+
+        #submitAnswer, #nextQuestion {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        #score {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Math Quiz Game</h1>
+    <div id="gameContainer">
+        <div id="question"></div>
+        <input type="number" id="answerInput" placeholder="Your answer">
+        <button id="submitAnswer">Submit</button>
+        <div id="result"></div>
+        <div id="score">Score: 0</div>
+        <button id="nextQuestion" style="display: none;">Next Question</button>
+    </div>
+    <script>
+        const questionDiv = document.getElementById('question');
+        const answerInput = document.getElementById('answerInput');
+        const submitAnswerButton = document.getElementById('submitAnswer');
+        const nextQuestionButton = document.getElementById('nextQuestion');
+        const resultDiv = document.getElementById('result');
+        const scoreDiv = document.getElementById('score');
+
+        let score = 0;
+        let currentQuestion;
+        let currentAnswer;
+
+        function generateQuestion() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const operations = ['+', '-'];
+            const randomOperation = operations[Math.floor(Math.random() * operations.length)];
+            switch(randomOperation) {
+                case '+':
+                    currentAnswer = num1 + num2;
+                    currentQuestion = `${num1} + ${num2}`;
+                    break;
+                case '-':
+                    currentAnswer = num1 - num2;
+                    currentQuestion = `${num1} - ${num2}`;
+                    break;
+            }
+            questionDiv.textContent = currentQuestion;
+        }
+
+        submitAnswerButton.addEventListener('click', () => {
+            const userAnswer = parseFloat(answerInput.value);
+            if (userAnswer === currentAnswer) {
+                resultDiv.textContent = 'Correct!';
+                score++;
+            } else {
+                resultDiv.textContent = `Wrong! The correct answer was ${currentAnswer}.`;
+            }
+            scoreDiv.textContent = `Score: ${score}`;
+            answerInput.value = '';
+            answerInput.disabled = true;
+            submitAnswerButton.style.display = 'none';
+            nextQuestionButton.style.display = 'inline';
+        });
+
+        nextQuestionButton.addEventListener('click', () => {
+            generateQuestion();
+            resultDiv.textContent = '';
+            answerInput.disabled = false;
+            submitAnswerButton.style.display = 'inline';
+            nextQuestionButton.style.display = 'none';
+        });
+
+        generateQuestion();
+    </script>
+</body>
+</html>
